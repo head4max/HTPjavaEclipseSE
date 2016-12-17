@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Orangery">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="plant" maxOccurs="20">
+					<xs:complexType>
+						<xs:sequence>
+
+							<xs:element name="name" type="xs:string" />
+
+							<xs:element name="soil">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="fat" />
+										<xs:enumeration value="entisol" />
+										<xs:enumeration value="fat-entisol" />
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+
+							<xs:element name="visualParametr">
+								<xs:complexType>
+									<xs:attribute name="color" type="xs:string" />
+									<xs:attribute name="range" type="xs:integer" />
+								</xs:complexType>
+							</xs:element>
+							
+							<xs:element name="origin" type="xs:string" />
+
+							<xs:element name="growingTips">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="temperature" >
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:integer">
+													<xs:attribute name="ei" type="xs:string" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="watering">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:integer">
+													<xs:attribute name="ei" type="xs:string" />
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+							<xs:element name="multiplying">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="seed" />
+										<xs:enumeration value="shaft" />
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

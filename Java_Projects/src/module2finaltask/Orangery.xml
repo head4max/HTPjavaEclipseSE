@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Orangery>
+	<plant>
+		<name>rose</name>
+		<soil>fat</soil>
+		<visualParametr color="red" range="40" />
+		<origin>brasilia</origin>
+		<growingTips>
+			<temperature ei="degree">15</temperature>
+			<watering ei="ml3">40</watering>
+		</growingTips>
+		<multiplying>shaft</multiplying>
+	</plant>
+	<plant>
+		<name>nettle</name>
+		<soil>entisol</soil>
+		<visualParametr color="green" range="15" />
+		<origin>russian</origin>
+		<growingTips>
+			<temperature ei="degree">8</temperature>
+			<watering ei="ml3">25</watering>
+		</growingTips>
+		<multiplying>seed</multiplying>
+	</plant>
+</Orangery>

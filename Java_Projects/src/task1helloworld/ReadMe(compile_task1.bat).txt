@@ -1,0 +1,1 @@
+запускает compile_java.bat с параметрами HelloWorld и helloworld
