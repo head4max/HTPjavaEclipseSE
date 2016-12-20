@@ -6,7 +6,7 @@ public class SweetBoxMain {
 
 	public static void main(String[] args) {
 		try {
-			new BoxMenu().getBoxMenu();;
+			new BoxMenu().getBoxMenu();
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {

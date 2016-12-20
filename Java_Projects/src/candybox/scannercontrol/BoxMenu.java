@@ -17,16 +17,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import candybox.CandyBox;
-import candybox.sweet.BonBon;
-import candybox.sweet.Chocolate;
-import candybox.sweet.ChocolateBar;
-import candybox.sweet.ChocolateButter;
-import candybox.sweet.CrispCandy;
-import candybox.sweet.LayeredCake;
-import candybox.sweet.MixCake;
+import candybox.SweetnessFactory;
+import candybox.SweetnessFactory.Sweet;
 import candybox.sweet.Sweetness;
 
-public class BoxMenu implements Savable, Loadable {
+public class BoxMenu implements Savable, Loadable, Localable {
 
 	private ArrayList<Integer> alInitialMenuNumbers;
 
@@ -35,14 +30,17 @@ public class BoxMenu implements Savable, Loadable {
 	
 	private CandyBox boxOfSweetnesses;
 	
-	private ResourceBundle bundle;
+	/**
+	 * collection of {@link Sweetness} object
+	 */
+	private ResourceBundle boxMenuBundle;
 	
 	private Scanner sc;
 	
 	public BoxMenu(){
 		this.sc = new Scanner(System.in);
 		
-		Locale.setDefault(Locale.US);
+		this.setLocale();
 	}
 	
 	protected void finalize() throws Throwable{
@@ -54,54 +52,52 @@ public class BoxMenu implements Savable, Loadable {
 		boxOfSweetnesses = new CandyBox();
 		
 		while(true){
-
-			bundle = ResourceBundle.getBundle("candybox.i18n.InterfaceNames");
 			
 			alInitialMenuNumbers = new ArrayList<Integer>();
 			
 			alInitialMenuNumbers.add(1);
-			System.out.println(MessageFormat.format(bundle.getString("changeLocale"), alInitialMenuNumbers.size()));
+			System.out.println(MessageFormat.format(boxMenuBundle.getString("changeLocale"), alInitialMenuNumbers.size()));
 			
 			alInitialMenuNumbers.add(2);
-			System.out.println(MessageFormat.format(bundle.getString("datetime"), alInitialMenuNumbers.size()));
+			System.out.println(MessageFormat.format(boxMenuBundle.getString("datetime"), alInitialMenuNumbers.size()));
 			
 			if(boxOfSweetnesses.length() < 1 && canLoad){
 				alInitialMenuNumbers.add(3);
-				System.out.println(MessageFormat.format(bundle.getString("SweetnessAddMenu"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("SweetnessAddMenu"), alInitialMenuNumbers.size()));
 			}
 			
 			if(boxOfSweetnesses.length() > 1){
 				alInitialMenuNumbers.add(4);
-				System.out.println(MessageFormat.format(bundle.getString("sortByName"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("sortByName"), alInitialMenuNumbers.size()));
 				alInitialMenuNumbers.add(5);
-				System.out.println(MessageFormat.format(bundle.getString("sortByWeight"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("sortByWeight"), alInitialMenuNumbers.size()));
 			}
 			
 			if(boxOfSweetnesses.length() > 0){
 				alInitialMenuNumbers.add(6);
-				System.out.println(MessageFormat.format(bundle.getString("weightCandyBox"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("weightCandyBox"), alInitialMenuNumbers.size()));
 				alInitialMenuNumbers.add(7);
-				System.out.println(MessageFormat.format(bundle.getString("sugarBounds"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("sugarBounds"), alInitialMenuNumbers.size()));
 			}
 			
 			if(canSave){
 				alInitialMenuNumbers.add(8);
-				System.out.println(MessageFormat.format(bundle.getString("save"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("save"), alInitialMenuNumbers.size()));
 			}
 			
 			File file = new File("cndbx.dat");
 			if(file.exists() && canLoad){
 				alInitialMenuNumbers.add(9);
-				System.out.println(MessageFormat.format(bundle.getString("load"), alInitialMenuNumbers.size()));
+				System.out.println(MessageFormat.format(boxMenuBundle.getString("load"), alInitialMenuNumbers.size()));
 			}
 			
-			System.out.println(bundle.getString("quit"));
+			System.out.println(boxMenuBundle.getString("quit"));
 			
 			int consoleNumb = 0;
 			
 			while(true){
 				if(sc.hasNext("[" + "q" + "]")){
-					System.out.println(bundle.getString("exit"));
+					System.out.println(boxMenuBundle.getString("exit"));
 					return;
 				} else if(sc.hasNextInt()){
 					consoleNumb = sc.nextInt();
@@ -109,14 +105,14 @@ public class BoxMenu implements Savable, Loadable {
 						break;
 					} else {
 						sc.next();
-						System.out.println(bundle.getString("continue"));
+						System.out.println(boxMenuBundle.getString("continue"));
 					}
 				}
 			}
 			
 			switch(alInitialMenuNumbers.get(consoleNumb-1)){
 			case 1:
-				this.changeLocale();
+				this.setLocale();
 				break;
 			case 2:
 				System.out.println("");
@@ -151,20 +147,26 @@ public class BoxMenu implements Savable, Loadable {
 		}
 	}
 	
+	/**
+	 * out summed weight of {@link #boxOfSweetnesses} elements
+	 */
 	public void getWeightCandyBox(){
 		
-		System.out.println(bundle.getString("weightbox") + this.boxOfSweetnesses.getWeightCandyBox());
+		System.out.println(boxMenuBundle.getString("weightbox") + this.boxOfSweetnesses.getWeightCandyBox());
 		System.out.println();
 	}
 	
+	/**
+	 * out all {@link #boxOfSweetnesses} elements with sugar in a current bounds
+	 */
 	public void getSugarBounds(){
-		System.out.println(bundle.getString("lowerbound"));
+		System.out.println(boxMenuBundle.getString("lowerbound"));
 		
 		while(!sc.hasNextInt()){
 			sc.next();
 		}
 		
-		System.out.println(bundle.getString("upperbound"));
+		System.out.println(boxMenuBundle.getString("upperbound"));
 		int downBound = sc.nextInt();
 		
 		while(!sc.hasNextInt()){
@@ -184,21 +186,24 @@ public class BoxMenu implements Savable, Loadable {
 		}
 			
 		if(hasNoOneOutElement){
-			System.out.println(bundle.getString("noonesweetness"));
+			System.out.println(boxMenuBundle.getString("noonesweetness"));
 		}
 			
 		System.out.println();
 	}
 	
+	/**
+	 * add {@link Sweetness} object to {@link #boxOfSweetnesses}
+	 */
 	public void getSweetnessAddMenu(){
 		
-		this.boxOfSweetnesses.addSweetness(new BonBon("Твёрдая", 4, 20, "Chupa-Chups",""));
-		this.boxOfSweetnesses.addSweetness(new CrispCandy("шоколадная", 6, 20, "Grilyag", "орехи"));
-		this.boxOfSweetnesses.addSweetness(new LayeredCake(10, 150, "Tartlet", "тесто", "бисквит", "красители"));
-		this.boxOfSweetnesses.addSweetness(new MixCake(30, 200, "Zefir", "piramid", "бисквит"));
-		this.boxOfSweetnesses.addSweetness(new Chocolate(20, 100, "KinderSurprise", 50, "DedMoroz"));
-		this.boxOfSweetnesses.addSweetness(new ChocolateBar(50, 200, "AlpenGold", 50, 20));
-		this.boxOfSweetnesses.addSweetness(new ChocolateButter(10, 25, 500, "Nutella"));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.BONBON));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.CHOCOLATE));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.CHOCOLATEBAR));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.CHOCOLATEBUTTER));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.CRISPCANDY));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.LAYEREDCAKE));
+		this.boxOfSweetnesses.addSweetness(SweetnessFactory.getSweetness(Sweet.MIXCAKE));
 
 		this.canSave = true;
 		this.canLoad = false;
@@ -220,10 +225,10 @@ public class BoxMenu implements Savable, Loadable {
 			oos.flush();
 			oos.close();
 			fos.close();
-			System.out.println(bundle.getString("successfullysave"));
+			System.out.println(boxMenuBundle.getString("successfullysave"));
 			
 		} catch (IOException e) {
-			System.out.println(bundle.getString("unsaved"));;
+			System.out.println(boxMenuBundle.getString("unsaved"));;
 		}
 		
 		System.out.println("");
@@ -249,13 +254,13 @@ public class BoxMenu implements Savable, Loadable {
 			
 			oin.close();
 			fis.close();
-			System.out.println(bundle.getString("successfullyload"));
+			System.out.println(boxMenuBundle.getString("successfullyload"));
 			
 		} catch (FileNotFoundException e) {
 			
 		} catch (IOException e) {
 			
-			System.out.println(bundle.getString("unload"));
+			System.out.println(boxMenuBundle.getString("unload"));
 			
 		} catch (ClassNotFoundException e) {
 		}
@@ -265,16 +270,24 @@ public class BoxMenu implements Savable, Loadable {
 		this.boxOfSweetnesses.outCandyBox();
 	}
 	
-	public void changeLocale(){
-		if(Locale.getDefault().equals(Locale.US)){
-			Locale.setDefault(new Locale("ru","RU"));
+	
+	
+	@Override
+	public void setLocale(){
+		if(this.boxMenuBundle == null){
+			this.boxMenuBundle = ResourceBundle.getBundle("candybox.i18n.InterfaceNames");
 		} else {
-			Locale.setDefault(Locale.US);
+			if(this.boxMenuBundle.getLocale().equals(Locale.US)){
+				this.boxMenuBundle = ResourceBundle.getBundle("candybox.i18n.InterfaceNames", new Locale("ru","RU"));
+			} else {
+				this.boxMenuBundle = ResourceBundle.getBundle("candybox.i18n.InterfaceNames", Locale.US);
+			}
 		}
 	}
 	
+	@Override
 	public String getTimeDate(){
-		return DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date());
+		return DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, this.boxMenuBundle.getLocale()).format(new Date());
 	}
 
 }

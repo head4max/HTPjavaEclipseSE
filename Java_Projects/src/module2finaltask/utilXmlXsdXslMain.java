@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -125,7 +124,6 @@ public class utilXmlXsdXslMain {
 			System.out.println("file not found");
 		}
 		
-		//orangery.sort(new Comparator());
 		Collections.sort(orangery, new Comparator<Plant>(){
 			@Override
 			public int compare(Plant o1, Plant o2) {
