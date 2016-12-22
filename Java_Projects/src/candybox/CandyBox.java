@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+import candybox.logger.Log4CandyBox;
 import candybox.sweet.Sweetness;
 
 /**
@@ -54,6 +55,7 @@ public class CandyBox implements Serializable {
 	public void sortByWeight(){
 		Collections.sort(listOfSweetnesses, new CandyBox.SortByWeight());
 		this.outCandyBox();
+		Log4CandyBox.getInstance(this.getClass().getName(), "sort by weight");
 	}
 	
 	/**
@@ -62,6 +64,7 @@ public class CandyBox implements Serializable {
 	public void sortByName(){
 		Collections.sort(listOfSweetnesses, new CandyBox.SortByName());
 		this.outCandyBox();
+		Log4CandyBox.getInstance(this.getClass().getName(), "sort by name");
 	}
 	
 	/**

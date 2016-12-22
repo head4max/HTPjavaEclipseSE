@@ -19,8 +19,15 @@ import java.util.Scanner;
 import candybox.CandyBox;
 import candybox.SweetnessFactory;
 import candybox.SweetnessFactory.Sweet;
+import candybox.logger.Log4CandyBox;
 import candybox.sweet.Sweetness;
 
+
+/**
+ * console-interface class to control user's action
+ * @author head4max
+ *
+ */
 public class BoxMenu implements Savable, Loadable, Localable {
 
 	private ArrayList<Integer> alInitialMenuNumbers;
@@ -154,6 +161,7 @@ public class BoxMenu implements Savable, Loadable, Localable {
 		
 		System.out.println(boxMenuBundle.getString("weightbox") + this.boxOfSweetnesses.getWeightCandyBox());
 		System.out.println();
+		Log4CandyBox.getInstance(this.getClass().getName(), "get weight of candy box");
 	}
 	
 	/**
@@ -225,10 +233,10 @@ public class BoxMenu implements Savable, Loadable, Localable {
 			oos.flush();
 			oos.close();
 			fos.close();
-			System.out.println(boxMenuBundle.getString("successfullysave"));
+			Log4CandyBox.getInstance(this.getClass().getName(), "successfully save");
 			
 		} catch (IOException e) {
-			System.out.println(boxMenuBundle.getString("unsaved"));;
+			Log4CandyBox.getInstance(this.getClass().getName(), "unsuccessfully save");
 		}
 		
 		System.out.println("");
@@ -254,14 +262,11 @@ public class BoxMenu implements Savable, Loadable, Localable {
 			
 			oin.close();
 			fis.close();
-			System.out.println(boxMenuBundle.getString("successfullyload"));
+			Log4CandyBox.getInstance(this.getClass().getName(), "successfully load");
 			
 		} catch (FileNotFoundException e) {
-			
 		} catch (IOException e) {
-			
-			System.out.println(boxMenuBundle.getString("unload"));
-			
+			Log4CandyBox.getInstance(this.getClass().getName(), "unsuccessfully load");
 		} catch (ClassNotFoundException e) {
 		}
 		
